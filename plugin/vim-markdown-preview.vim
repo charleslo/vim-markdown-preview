@@ -6,6 +6,7 @@
 let g:vmp_script_path = resolve(expand('<sfile>:p:h'))
 
 let g:vmp_osname = 'Unidentified'
+let s:plugin_dir = expand('<sfile>:p:h:h')
 
 if has('win32') || has('win64')
   " Not yet used
@@ -58,6 +59,10 @@ if !exists("g:vim_markdown_preview_hotkey")
     let g:vim_markdown_preview_hotkey='<C-p>'
 endif
 
+if !exists("g:vim_markdown_preview_compile_hotkey")
+    let g:vim_markdown_preview_compile_hotkey='<C-m>'
+endif
+
 function! Vim_Markdown_Preview()
   let b:curr_file = expand('%:p')
 
@@ -66,7 +71,7 @@ function! Vim_Markdown_Preview()
   elseif g:vim_markdown_preview_perl == 1
     call system('Markdown.pl "' . b:curr_file . '" > /tmp/vim-markdown-preview.html')
   elseif g:vim_markdown_preview_pandoc == 1
-    call system('pandoc --standalone "' . b:curr_file . '" > /tmp/vim-markdown-preview.html')
+    call system('pandoc --template ' . s:plugin_dir . '/html.template --css ' . s:plugin_dir . '/kultiad-serif.css --self-contained --standalone "' . b:curr_file . '" > /tmp/vim-markdown-preview.html')
   else
     call system('markdown "' . b:curr_file . '" > /tmp/vim-markdown-preview.html')
   endif
@@ -110,6 +115,31 @@ function! Vim_Markdown_Preview()
   endif
 endfunction
 
+function! Vim_Markdown_Compile()
+  let b:curr_file = expand('%:p')
+
+  if g:vim_markdown_preview_github == 1
+    call system('grip "' . b:curr_file . '" --export /tmp/vmarkdown/vim-markdown-preview.html --title vim-markdown-preview.html')
+  elseif g:vim_markdown_preview_perl == 1
+    call system('Markdown.pl "' . b:curr_file . '" > /tmp/vmarkdown/vim-markdown-preview.html')
+  elseif g:vim_markdown_preview_pandoc == 1
+    call system('pandoc --template ' . s:plugin_dir . '/html.template --css ' . s:plugin_dir . '/kultiad-serif.css --self-contained --standalone "' . b:curr_file . '" > /tmp/vmarkdown/vim-markdown-preview.html')
+    echo 'pandoc --template ' . s:plugin_dir . '/html.template --css ' . s:plugin_dir . '/kultiad-serif.css --self-contained --standalone "' . b:curr_file . '" > /tmp/vmarkdown/vim-markdown-preview.html'
+  else
+    call system('markdown "' . b:curr_file . '" > /tmp/vmarkdown/vim-markdown-preview.html')
+  endif
+  if v:shell_error
+    echo 'Please install the necessary requirements: https://github.com/JamshedVesuna/vim-markdown-preview#requirements'
+  endif
+endfunction
+
+function! Vim_Markdown_LoadLocal()
+  let b:curr_file = expand('%:p')
+
+  call system(s:plugin_dir . '/start_server')
+  call system('xdg-open http://localhost:9090/vim-markdown-preview.html 1>/dev/null 2>/dev/null &')
+
+endfunction
 
 "Renders html locally and displays images
 function! Vim_Markdown_Preview_Local()
@@ -166,7 +196,9 @@ endfunction
 
 if g:vim_markdown_preview_toggle == 0
   "Maps vim_markdown_preview_hotkey to Vim_Markdown_Preview()
-  :exec 'autocmd Filetype markdown,md map <buffer> ' . g:vim_markdown_preview_hotkey . ' :call Vim_Markdown_Preview()<CR>'
+  ":exec 'autocmd Filetype markdown,md map <buffer> ' . g:vim_markdown_preview_hotkey . ' :call Vim_Markdown_Preview()<CR>'
+  :exec 'autocmd Filetype markdown,md map <buffer> ' . g:vim_markdown_preview_hotkey . ' :call Vim_Markdown_LoadLocal()<CR>'
+  :exec 'autocmd Filetype markdown,md map <buffer> ' . g:vim_markdown_preview_compile_hotkey . ' :call Vim_Markdown_Compile()<CR>'
 elseif g:vim_markdown_preview_toggle == 1
   "Display images - Maps vim_markdown_preview_hotkey to Vim_Markdown_Preview_Local() - saves the html file locally
   "and displays images in path

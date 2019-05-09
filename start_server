@@ -1,0 +1,9 @@
+#!/bin/bash
+
+if ps -aux | grep http.server | grep -v grep; then
+  echo Server Running
+else
+  echo Starting Server
+  mkdir -p /tmp/vmarkdown
+  python -m http.server 9090 --directory /tmp/vmarkdown &> /dev/null &
+fi
