@@ -4,6 +4,7 @@
 "============================================================
 " Use xdg-open and livereload
 " Set default browser xdg-settings set default-web-browser firefox.desktop
+" firefox: browser.link.open_newwindow.override.external;1
 
 let g:vmp_script_path = resolve(expand('<sfile>:p:h'))
 
