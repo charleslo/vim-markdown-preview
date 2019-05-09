@@ -2,6 +2,8 @@
 "                    Vim Markdown Preview
 "   git@github.com:JamshedVesuna/vim-markdown-preview.git
 "============================================================
+" Use xdg-open and livereload
+" Set default browser xdg-settings set default-web-browser firefox.desktop
 
 let g:vmp_script_path = resolve(expand('<sfile>:p:h'))
 
@@ -124,7 +126,6 @@ function! Vim_Markdown_Compile()
     call system('Markdown.pl "' . b:curr_file . '" > /tmp/vmarkdown/vim-markdown-preview.html')
   elseif g:vim_markdown_preview_pandoc == 1
     call system('pandoc --template ' . s:plugin_dir . '/html.template --css ' . s:plugin_dir . '/kultiad-serif.css --self-contained --standalone "' . b:curr_file . '" > /tmp/vmarkdown/vim-markdown-preview.html')
-    echo 'pandoc --template ' . s:plugin_dir . '/html.template --css ' . s:plugin_dir . '/kultiad-serif.css --self-contained --standalone "' . b:curr_file . '" > /tmp/vmarkdown/vim-markdown-preview.html'
   else
     call system('markdown "' . b:curr_file . '" > /tmp/vmarkdown/vim-markdown-preview.html')
   endif
