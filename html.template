@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html$if(lang)$ lang="$lang$"$endif$>
 <head>
-
+<script type="text/javascript" src="http://livejs.com/live.js"></script>
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
 $for(author-meta)$
