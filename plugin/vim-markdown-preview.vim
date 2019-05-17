@@ -74,7 +74,7 @@ function! Vim_Markdown_Preview()
   elseif g:vim_markdown_preview_perl == 1
     call system('Markdown.pl "' . b:curr_file . '" > /tmp/vim-markdown-preview.html')
   elseif g:vim_markdown_preview_pandoc == 1
-    call system('pandoc --template ' . s:plugin_dir . '/html.template --css ' . s:plugin_dir . '/kultiad-serif.css --self-contained --standalone "' . b:curr_file . '" > /tmp/vim-markdown-preview.html')
+    call system('pandoc --mathjax="" --template ' . s:plugin_dir . '/html.template --css ' . s:plugin_dir . '/kultiad-serif.css --self-contained --standalone "' . b:curr_file . '" > /tmp/vim-markdown-preview.html')
   else
     call system('markdown "' . b:curr_file . '" > /tmp/vim-markdown-preview.html')
   endif
@@ -126,7 +126,7 @@ function! Vim_Markdown_Compile()
   elseif g:vim_markdown_preview_perl == 1
     call system('Markdown.pl "' . b:curr_file . '" > /tmp/vmarkdown/vim-markdown-preview.html')
   elseif g:vim_markdown_preview_pandoc == 1
-    call system('pandoc --template ' . s:plugin_dir . '/html.template --css ' . s:plugin_dir . '/kultiad-serif.css --self-contained --standalone "' . b:curr_file . '" > /tmp/vmarkdown/vim-markdown-preview.html')
+    call system('pandoc --mathjax="" --template ' . s:plugin_dir . '/html.template --css ' . s:plugin_dir . '/kultiad-serif.css --self-contained --standalone "' . b:curr_file . '" > /tmp/vmarkdown/vim-markdown-preview.html')
   else
     call system('markdown "' . b:curr_file . '" > /tmp/vmarkdown/vim-markdown-preview.html')
   endif
